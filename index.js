@@ -16,6 +16,6 @@ app.listen(port, () => {
 
 async function randomDelay() {
   return new Promise((resolve) => {
-    setTimeout(resolve, Math.round(Math.random() * 1000));
+    setTimeout(resolve, Math.round(Math.random() * 50));
   });
 }
