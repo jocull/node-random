@@ -20,8 +20,9 @@ const randomObjectPool = _.range(0, 1000)
     }
   });
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   const randomElement = randomObjectPool[Math.floor(Math.random() * randomObjectPool.length)];
+  await randomDelay();
   res.contentType('application/json').send(randomElement);
 });
 
