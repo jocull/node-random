@@ -43,7 +43,9 @@ console.log(`Generating random object pool...`);
 const randomObjectPool = [];
 for (let i = 0; i < 1000; i++) {
   try {
-    randomObjectPool.push(randomObjectGenerator.runOnce());
+    const obj = randomObjectGenerator.runOnce();
+    const str = JSON.stringify(obj, null, 2);
+    randomObjectPool.push(str);
   } catch (err) {
     // TODO: Kind of gross. Can we fix with by limiting max depth?
     console.error('Generation error - will skip this one', err);
@@ -52,7 +54,7 @@ for (let i = 0; i < 1000; i++) {
 
 app.get('/', (req, res) => {
   const randomElement = randomObjectPool[Math.floor(Math.random() * randomObjectPool.length)];
-  res.send(randomElement);
+  res.contentType('application/json').send(randomElement);
 });
 
 app.listen(port, () => {
