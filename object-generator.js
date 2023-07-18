@@ -29,6 +29,11 @@ module.exports = (function () {
     randomString,
     randomNumber,
     randomInteger,
+    // Reduce probability of nested object
+    randomString,
+    randomNumber,
+    randomInteger,
+    // But still possible
     randomObject, // TODO: Can cause stack overflow because we keep nesting deeper objects
   ]);
 
