@@ -21,9 +21,8 @@ const randomObjectPool = _.range(0, 1000)
   });
 
 app.get('/', async (req, res) => {
-  const randomElement = randomObjectPool[Math.floor(Math.random() * randomObjectPool.length)];
   await randomDelay();
-  res.contentType('application/json').send(randomElement);
+  res.contentType('application/json').send(_.sample(randomObjectPool));
 });
 
 app.listen(port, () => {
