@@ -9,7 +9,7 @@ const CACHE_FILENAME = '.cached';
 let cached = [];
 if (fs.existsSync(CACHE_FILENAME)) {
   try {
-    cached = fs.readFileSync(CACHE_FILENAME).toString().split('\n');
+    cached = fs.readFileSync(CACHE_FILENAME).toString().split('\n').map(line => JSON.parse(line));
   } catch (err) {
     console.error('Failed to read from cache', err);
   }
