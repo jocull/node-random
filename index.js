@@ -1,24 +1,9 @@
 const express = require('express');
 const _ = require('lodash');
-const objectGenerator = require('./object-generator');
+const randomObjectPool = require('./object-pool');
 
 const app = express();
 const port = 3000;
-
-console.log(`Generating random object pool...`);
-const randomObjectPool = _.range(0, 1000)
-  .map(i => {
-    while (true) {
-      try {
-        const obj = objectGenerator.runOnce();
-        const str = JSON.stringify(obj, null, 2);
-        return str;
-      } catch (err) {
-        // TODO: Kind of gross. Can we fix with by limiting max depth?
-        console.error('Generation error - will skip this one', err);
-      }
-    }
-  });
 
 app.get('/', async (req, res) => {
   await randomDelay();
