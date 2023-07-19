@@ -6,6 +6,10 @@ const app = express();
 const port = 3000;
 
 app.get('/', async (req, res) => {
+  res.contentType('application/json').send(_.sample(randomObjectPool));
+});
+
+app.get('/slow', async (req, res) => {
   await randomDelay();
   res.contentType('application/json').send(_.sample(randomObjectPool));
 });
