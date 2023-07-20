@@ -1,47 +1,43 @@
+// https://stackoverflow.com/a/54949738/97964
 const h = require('hasard');
 
-// https://stackoverflow.com/a/54949738/97964
-module.exports = (function () {
-  const randomInteger = h.integer({ type: 'poisson', lambda: 4 });
+const randomInteger = h.integer(10, 30);
+const randomNumber = h.number([0, 100_000]);
+const randomKeyString = h.string({
+  size: h.integer(10, 50),
+  value: h.value('abcdefghijklmnopqrstuvwxyz_'.split('')),
+});
+const randomValueString = h.string({
+  size: h.integer(100, 10_000),
+  value: h.value('abcdefghijklmnopqrstuvwxyz1234567890'.split('')),
+});
 
-  const randomKeyString = h.string({
-    size: h.add(randomInteger, 50),
-    value: h.value('abcdefghijklmnopqrstuvwxyz'.split('')),
-  });
+const randomKeys = h.array({
+  size: randomInteger,
+  value: randomKeyString,
+});
+const randomValue = h.value([
+  randomValueString,
+  randomNumber,
+  randomInteger,
+]);
+const randomObject = h.object(
+  randomKeys,
+  randomValue,
+);
 
-  const randomString = h.string({
-    size: h.multiply(randomInteger, 200),
-    value: h.value('abcdefghijklmnopqrstuvwxyz'.split('')),
-  });
+module.exports = function generate() {
+  const l3 = randomObject.runOnce();
+  const l2 = randomObject.runOnce();
+  const l1 = randomObject.runOnce();
 
-  const randomNumber = h.number([0, 100]);
+  const keys = randomKeys.runOnce();
+  l1.set = randomObject.run(randomInteger.runOnce());
+  l2.set = randomObject.run(randomInteger.runOnce());
+  l3.set = randomObject.run(randomInteger.runOnce());
 
-  const randomKeys = h.array({
-    size: randomInteger,
-    value: randomKeyString,
-  });
+  l1[keys[0]] = l2;
+  l2[keys[1]] = l3;
 
-  // we first define it, to use it as reference into randomObject
-  const randomValue = h.value();
-
-  const randomObject = h.object(
-    randomKeys,
-    randomValue,
-  );
-
-  // And we set recursivity by setting his values afterward
-  randomValue.set([
-    randomString,
-    randomNumber,
-    randomInteger,
-    // Reduce probability of nested object
-    randomString,
-    randomNumber,
-    randomInteger,
-    // But still possible
-    randomObject, // TODO: Can cause stack overflow because we keep nesting deeper objects
-    randomObject,
-  ]);
-
-  return randomObject;
-})();
+  return l1;
+}

@@ -14,7 +14,7 @@ const objectGenerator = require('./object-generator');
 function generateObjectString() {
   while (true) {
     try {
-      const obj = objectGenerator.runOnce();
+      const obj = objectGenerator();
       obj.randomDouble = Math.random(); // Attach a known random field worth parsing
       return JSON.stringify(obj);
     } catch (err) {
@@ -44,14 +44,14 @@ async function createTableIfNotExists() {
 }
 
 module.exports = (async function () {
-  const poolSize = 1000;
+  const poolSize = 100;
   let existingRows = await createTableIfNotExists();
   if (existingRows < poolSize) {
     console.log("Generating + writing random objects...");
     for (let i = 1; i <= poolSize; i++) {
       const objStr = generateObjectString();
       await knex.raw(`INSERT INTO object_cache (value) VALUES (:value)`, { value: objStr });
-      if (i % 250 == 0 && i > 0) {
+      if (i % 10 == 0 && i > 0) {
         console.log(`${i}...`);
       }
     }
