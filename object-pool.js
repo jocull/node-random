@@ -59,7 +59,7 @@ module.exports = (async function () {
     console.log("Using objects from cache");
   }
   const results = (await knex.raw(`SELECT id, value FROM object_cache ORDER BY RANDOM()`))
-    .map(row => JSON.parse(row.value));
+    .map(row => row.value);
 
   knex.destroy(); // Close it, we're done
 
