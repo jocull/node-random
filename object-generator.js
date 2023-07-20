@@ -4,8 +4,13 @@ const h = require('hasard');
 module.exports = (function () {
   const randomInteger = h.integer({ type: 'poisson', lambda: 4 });
 
+  const randomKeyString = h.string({
+    size: h.add(randomInteger, 50),
+    value: h.value('abcdefghijklmnopqrstuvwxyz'.split('')),
+  });
+
   const randomString = h.string({
-    size: h.add(randomInteger, 5),
+    size: h.multiply(randomInteger, 200),
     value: h.value('abcdefghijklmnopqrstuvwxyz'.split('')),
   });
 
@@ -13,7 +18,7 @@ module.exports = (function () {
 
   const randomKeys = h.array({
     size: randomInteger,
-    value: randomString,
+    value: randomKeyString,
   });
 
   // we first define it, to use it as reference into randomObject
@@ -35,6 +40,7 @@ module.exports = (function () {
     randomInteger,
     // But still possible
     randomObject, // TODO: Can cause stack overflow because we keep nesting deeper objects
+    randomObject,
   ]);
 
   return randomObject;
