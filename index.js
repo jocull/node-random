@@ -23,6 +23,10 @@ async function randomDelay() {
     res.contentType('application/json').send(_.sample(objectPool));
   });
 
+  app.post('/', async (req, res) => {
+    res.status(200).send();
+  });
+
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
   });
