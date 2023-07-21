@@ -3,7 +3,8 @@ const _ = require('lodash');
 const objectPoolPromise = require('./object-pool');
 
 const app = express();
-const port = 3000;
+const port = parseInt(process.argv[2] || 3000);
+console.log("Using port", port);
 
 async function randomDelay() {
   return new Promise((resolve) => {
