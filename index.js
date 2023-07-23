@@ -15,17 +15,25 @@ async function randomDelay() {
 (async function main() {
   const objectPool = await objectPoolPromise;
 
+  function sendRandomObject(req, res) {
+    if (req.accepts('json')) {
+      res.type('json').send(_.sample(objectPool));
+    } else {
+      res.type('txt').send(_.sample(objectPool))
+    }
+  }
+
   app.get('/', async (req, res) => {
-    res.contentType('application/json').send(_.sample(objectPool));
+    sendRandomObject(req, res);
   });
 
   app.get('/slow', async (req, res) => {
     await randomDelay();
-    res.contentType('application/json').send(_.sample(objectPool));
+    sendRandomObject(req, res);
   });
 
   app.post('/', async (req, res) => {
-    res.status(200).send();
+    res.status(204).send();
   });
 
   app.listen(port, () => {
