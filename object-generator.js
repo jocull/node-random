@@ -4,11 +4,11 @@ const h = require('hasard');
 const randomInteger = h.integer(10, 30);
 const randomNumber = h.number([0, 100_000]);
 const randomKeyString = h.string({
-  size: h.integer(10, 50),
+  size: h.integer(5, 30),
   value: h.value('abcdefghijklmnopqrstuvwxyz_'.split('')),
 });
 const randomValueString = h.string({
-  size: h.integer(100, 10_000),
+  size: h.integer(20, 1_000),
   value: h.value('abcdefghijklmnopqrstuvwxyz1234567890'.split('')),
 });
 
